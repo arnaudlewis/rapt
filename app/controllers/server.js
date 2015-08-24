@@ -1,4 +1,5 @@
 var express = require('express');
+var app = express();
 var http = require('http');
 var url = require('url');
 var request = require('request');
@@ -6,28 +7,26 @@ var request = require('request');
 var Scraper = require('../components/Scraper');
 var ReverseGeocoder = require('../components/ReverseGeocoder');
 
+app.set('port', (process.env.PORT || 5000));
 
-var app = express();
-
-http.createServer(function (req, res) {
-  if(req.method == "GET") {
-    if(req.url.match('/itinerary.*')) {
-      res.writeHead(200, {
-        'Content-Type': 'text/json',
-        'Access-Control-Allow-Origin' : "*"
-      });
+app.get('/itinerary', function(req, res) {
       var requestParams = url.parse(req.url,true).query;
-
       ReverseGeocoder.getAddress(requestParams.latitude, requestParams.longitude, function(address) {
         requestRatp(address, requestParams.station, function(html) {
-          res.end(JSON.stringify(Scraper.execute(html)));
+          res.status(200)
+          .send(JSON.stringify(Scraper.execute(html)));
         });
       });
-    } else {
-      res.writeHead(404, "Page not found, try again buddy");
-    }
-  }
-}).listen(5000);
+});
+
+app.get('/*', function(req, res) {
+         res.status(404)
+         .send('Sorry but there\'s nothing there. Try again buddy !');
+});
+
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
 
 function requestRatp(address, station, callback) {
   var options = {
