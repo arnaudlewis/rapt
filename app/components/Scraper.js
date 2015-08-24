@@ -1,34 +1,40 @@
 var cheerio = require('cheerio');
+var Time = require('../models/Time');
+
+var TIME_REGEX = new RegExp("^(([0-9]{1,2})[\\s][A-Za-z]+[\\s])?([0-9]{1,2})[\\s][A-Za-z]+$");
 
 module.exports = {
 
-  connections : [],
-  
   execute : function(html) {
-    console.log(html);
-    var domTree = cheerio.load(html);
-    return this.buildResponse(domTree);
+    return this.buildResponse(cheerio.load(html));
   },
 
   buildResponse: function (domTree) {
     return {
       nb_connections: this.getNbConnections(),
-      duration: this.getDuration(),
-      walk_duration: this.getWalkDuration(),
-      connections: this.getConnections()
+      duration: this.getDuration(domTree),
+      walk_duration: this.getWalkDuration(domTree)
+      // connections: this.getConnections()
     }
   },
 
-  getDuration : function () {
-
+  createTimeObjectFromTimeStr: function (timeStr) {
+    var timeMatches = TIME_REGEX.exec(timeStr.replace(':', '').trim());
+    return new Time(timeMatches[2] || 0, timeMatches[3] || 0); 
   },
 
-  getWalkDuration : function() {
+  getDuration : function (domTree) {
+    var fullWalkDurationStr = domTree('dd.time').find('b').text();
+    return this.createTimeObjectFromTimeStr(fullWalkDurationStr);
+  },
 
+  getWalkDuration : function(domTree) {
+    var fullWalkDurationStr = domTree('dd.walk').find('b').text();
+    return this.createTimeObjectFromTimeStr(fullWalkDurationStr);
   },
 
   getConnections : function () {
-
+    return [];
   },
 
   getNbConnections : function () {

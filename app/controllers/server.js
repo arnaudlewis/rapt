@@ -27,7 +27,6 @@ http.createServer(function (req, res) {
       res.writeHead(404, "Page not found, try again buddy");
     }
   }
-  res.end()
 }).listen(3000);
 
 function requestRatp(address, station, callback) {
