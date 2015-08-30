@@ -6,22 +6,27 @@ var request = require('request');
 
 var Scraper = require('../components/Scraper');
 var ReverseGeocoder = require('../components/ReverseGeocoder');
+var MetroStations = require('../data/MetroStations');
 
 app.set('port', (process.env.PORT || 5000));
 
 app.get('/itinerary', function(req, res) {
-      var requestParams = url.parse(req.url,true).query;
-      ReverseGeocoder.getAddress(requestParams.latitude, requestParams.longitude, function(address) {
-        requestRatp(address, requestParams.station, function(html) {
-          res.status(200)
-          .send(JSON.stringify(Scraper.execute(html)));
-        });
-      });
+  var requestParams = url.parse(req.url,true).query;
+  ReverseGeocoder.getAddress(requestParams.geolocation_latitude, requestParams.geolocation_longitude, function(address) {
+    requestRatp(address, requestParams.arrival, function(html) {
+      res.status(200)
+      .send(JSON.stringify(Scraper.execute(html)));
+    });
+  });
+});
+
+app.get('/stations', function(req, res) {
+  res.status(200).send(JSON.stringify(MetroStations));
 });
 
 app.get('/*', function(req, res) {
-         res.status(404)
-         .send('Sorry but there\'s nothing there. Try again buddy !');
+ res.status(404)
+ .send('Sorry but there\'s nothing there. Try again buddy !');
 });
 
 app.listen(app.get('port'), function() {
@@ -54,3 +59,9 @@ function generateParams(address, station) {
     time : {hour: 23, minute: 45}
   }
 }
+
+
+
+// stationArrivee = $(this).html() + " (METRO), "+$(this).data("ville");
+
+// https://rapt-api.herokuapp.com/itinerary?geolocation_latitude=48.873539&geolocation_longitude=2.361709&arrival=Le+V%C3%A9sinet-Le+Pecq+%28RER%29%2C+Le+V%C3%A9sinet
