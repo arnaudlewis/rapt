@@ -56,11 +56,9 @@ function generateParams(address, station) {
     date_start: -1,
     mode: "ferre_tram",
     route_type: 1,
-    time : {hour: 23, minute: 45}
+    time : {hour: 01, minute: 55}
   }
 }
-
-
 
 // stationArrivee = $(this).html() + " (METRO), "+$(this).data("ville");
 
