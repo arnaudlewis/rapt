@@ -39,11 +39,12 @@ module.exports = {
     var domSteps = domTree('ul.trace.step');
     for (var step = 0; step < domSteps.length; step++) {
       var departure = domTree(domSteps[step]).find('.stop').first().text();
+      var arrival = domTree(domSteps[step]).find('.stop').last().text();
       var direction = DIRECTION_REGEX.exec(domTree(domSteps[step]).find('.dir').text().trim())[1];
       var startTime = this.createTimeObjectFromTimeStr(domTree(domSteps[step]).find('.start').text());
       var line = LINE_REGEX.exec(domTree(domSteps[step]).find('.ligne').attr('alt').trim())[1].toLowerCase();
       var lineType = domTree(domSteps[step]).find('.network').attr('alt').toLowerCase();
-      connections.push(new Connection(departure, startTime, direction, new Transport(line, lineType)));
+      connections.push(new Connection(departure, arrival, startTime, direction, new Transport(line, lineType)));
     };
     return connections;
   },
