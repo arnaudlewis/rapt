@@ -13,6 +13,7 @@ app.set('port', (process.env.PORT || 5000));
 app.get('/itinerary', function(req, res) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
 
   var requestParams = url.parse(req.url,true).query;
   ReverseGeocoder.getAddress(requestParams.geolocation_latitude, requestParams.geolocation_longitude, function(address) {
@@ -26,7 +27,8 @@ app.get('/itinerary', function(req, res) {
 app.get('/stations', function(req, res) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  
+  next();
+
   res.status(200).send(JSON.stringify(MetroStations));
 });
 
