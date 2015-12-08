@@ -25,8 +25,9 @@ module.exports = {
   },
 
   getDuration : function (domTree) {
-    var fullWalkDurationStr = domTree('dd.time').find('b').text();
-    return this.createTimeObjectFromTimeStr(fullWalkDurationStr);
+    var durationStr = domTree('dd.time').find('b').text();
+    console.log(durationStr);
+    return this.createTimeObjectFromTimeStr(durationStr);
   },
 
   getWalkDuration : function(domTree) {
