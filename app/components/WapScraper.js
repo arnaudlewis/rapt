@@ -21,17 +21,29 @@ module.exports = {
 
   createTimeObjectFromTimeStr: function (timeStr) {
     var timeMatches = TIME_REGEX.exec(timeStr.replace(':', '').trim());
-    return new Time(timeMatches[2] || 0, timeMatches[3] || 0); 
+    return new Time(timeMatches[2], timeMatches[3]); 
   },
 
   getDuration : function (domTree) {
-    var fullWalkDurationStr = domTree('dd.time').find('b').text();
-    return this.createTimeObjectFromTimeStr(fullWalkDurationStr);
+    var durationStr = domTree('.subtitle').find('.bwhite').first().text();
+    return this.createTimeObjectFromTimeStr(durationStr);
+  },
+
+  mergeTimeObject: function (first, second) {
+    var minutes = (first.getMinutes() + second.getMinutes()) % 60;
+    var hours = first.getHours() + second.getHours() + Math.floor((first.getMinutes() + second.getMinutes()) / 60);
+    console.log(minutes + " ||| " + hours);
+    return new Time(hours, minutes);
   },
 
   getWalkDuration : function(domTree) {
-    var fullWalkDurationStr = domTree('dd.walk').find('b').text();
-    return this.createTimeObjectFromTimeStr(fullWalkDurationStr);
+    console.log (
+      domTree('img[src$="marche_1.gif"]').map(function($elem, index) {
+        return createTimeObjectFromTimeStr($elem.parent().next().find('b').text());
+      }).reduce(function(prev, current, index, array) {
+        return this.mergeTimeObject(previous, current);
+      })
+    );
   },
 
   getConnections : function (domTree) {
