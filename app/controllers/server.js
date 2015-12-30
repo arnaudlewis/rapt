@@ -24,6 +24,8 @@ app.get('/itinerary', function(req, res, next) {
   var requestParams = url.parse(req.url,true).query;
   ReverseGeocoder.getAddress(requestParams.geolocation_latitude, requestParams.geolocation_longitude, function(address) {
     var params = {address: address, station: requestParams.arrival};
+    console.log(requestParams.mode);
+    console.log(params);
 
     switch (requestParams.mode) {
       case API_MODE.WAP_MODE: 
@@ -77,6 +79,7 @@ function requestRatp (params, callback) {
 }
 
 function requestWapRatp (params, callback) {
+  console.log(params);
   var options = {
     url: 'http://wap.ratp.fr/siv/itinerary-list',
     qs: params,
@@ -85,11 +88,13 @@ function requestWapRatp (params, callback) {
       'Accept': 'text/html'
     }
   };
-  request(options, function(error, response, html) {
+  var r = request(options, function(error, response, html) {
     if (!error && response.statusCode == 200) {
       callback(html);
     }
   });
+
+  console.log(options);
 }
 
 // stationArrivee = $(this).html() + " (METRO), "+$(this).data("ville");

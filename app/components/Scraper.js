@@ -20,6 +20,7 @@ module.exports = {
   },
 
   createTimeObjectFromTimeStr: function (timeStr) {
+    console.log('timeStr + '+ timeStr);
     var timeMatches = TIME_REGEX.exec(timeStr.replace(':', '').trim());
     return new Time(timeMatches[2] || 0, timeMatches[3] || 0); 
   },

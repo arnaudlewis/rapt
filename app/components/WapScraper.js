@@ -37,27 +37,51 @@ module.exports = {
   },
 
   getWalkDuration : function(domTree) {
-    console.log (
-      domTree('img[src$="marche_1.gif"]').map(function($elem, index) {
+      /*domTree('img[src$="marche_1.gif"]').map(function($elem, index) {
         return createTimeObjectFromTimeStr($elem.parent().next().find('b').text());
       }).reduce(function(prev, current, index, array) {
         return this.mergeTimeObject(previous, current);
       })
-    );
+    );*/
   },
 
   getConnections : function (domTree) {
     var connections = [];
-    var domSteps = domTree('ul.trace.step');
-    for (var step = 0; step < domSteps.length; step++) {
-      var departure = domTree(domSteps[step]).find('.stop').first().text();
-      var arrival = domTree(domSteps[step]).find('.stop').last().text();
-      var direction = DIRECTION_REGEX.exec(domTree(domSteps[step]).find('.dir').text().trim())[1];
-      var startTime = this.createTimeObjectFromTimeStr(domTree(domSteps[step]).find('.start').text());
-      var line = LINE_REGEX.exec(domTree(domSteps[step]).find('.ligne').attr('alt').trim())[1].toLowerCase();
-      var lineType = domTree(domSteps[step]).find('.network').attr('alt').toLowerCase();
-      connections.push(new Connection(departure, arrival, startTime, direction, new Transport(line, lineType)));
-    };
+    var domSteps = domTree('div.bg3');
+
+    var counterStep = 0;
+
+    for(var dataStep=1; dataStep < domSteps.length+1; dataStep++){
+      var departure;
+      var arrival;
+      var direction;
+      var startTime;
+      var line;
+
+      //Need a connection counter 
+      nbSteps = domSteps.length / 4;
+      console.log(nbSteps);
+      //console.log(domSteps);
+
+      if (dataStep % 4 ==0){
+        direction = domTree(domSteps[dataStep]).clone().children().remove().end().text();
+      }
+      else if (dataStep % 4 == 1){
+        
+        var line = domTree(domSteps[dataStep]).children('img').attr('alt').replace(/[^\w\s]/gi, '');
+
+        departure = domTree(domSteps[dataStep]).clone().children().remove().end().text();
+
+        startTime = domTree(domSteps[dataStep]).children('b').last().text().replace(/[{()}]/g, '').substring(1);
+      }
+      else if (dataStep % 4 == 2){
+        arrival = domTree(domSteps[dataStep]).clone().children().remove().end().text();
+      }
+      else if (dataStep % 4 == 3){
+        connections.push(new Connection(departure, arrival, startTime, direction, new Transport(line, '')));
+      }
+
+    }
     return connections;
   },
 
