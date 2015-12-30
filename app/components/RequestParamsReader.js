@@ -4,7 +4,7 @@ module.exports = {
 
   execute: function(mode, params) {
     switch(mode) {
-      case API_MODE.WAP_MODE: this.generateWapParams(params.address, params.station); break;
+      case API_MODE.WAP_MODE: return this.generateWapParams(params.address, params.station); break;
       default: this.generateParams(params.address, params.station);
     }
   },
@@ -39,18 +39,17 @@ module.exports = {
   },
 
   generateWapParams: function (address, station) {
-    console.log(address);
-    console.log(wapStation(station));
-    return {
+    var returnParam = {
       type1: 'adresse',
       name1: address,
       type2: 'station',
       name2: this.wapStation(station),
       reseau: 'ferre',
-      traveltype: 'plus_rapide',
+      traveltype: 'minimum_de_marche',
       datestart: false,
       datehour: 3,
       dateminute: 55
-    }
+    };
+    return returnParam;
   }
 };
