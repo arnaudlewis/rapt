@@ -1,4 +1,4 @@
-var Transport = function (line, typ) {
+	var Transport = function (line, typ) {
   this.line = line;
   this.typ = typ;
 }

@@ -21,11 +21,12 @@ module.exports = {
 
   createTimeObjectFromTimeStr: function (timeStr) {
     var timeMatches = TIME_REGEX.exec(timeStr.replace(':', '').trim());
+    console.log(timeMatches);
     return new Time(timeMatches[2], timeMatches[3]); 
   },
 
   getDuration : function (domTree) {
-    var durationStr = domTree('.subtitle').find('.bwhite').first().text();
+    var durationStr = domTree('.subtitle').find('.bwhite').first().text();[]
     return this.createTimeObjectFromTimeStr(durationStr);
   },
 
@@ -47,6 +48,7 @@ module.exports = {
 
   getConnections : function (domTree) {
     var connections = [];
+    console.log(domTree('div.bg3'));
     var domSteps = domTree('div.bg3');
 
     var counterStep = 0;
