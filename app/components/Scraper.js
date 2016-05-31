@@ -12,26 +12,34 @@ var LINE_REGEX = new RegExp("^Ligne[\\s](.+)$");
 module.exports = {
 
   execute : function(html) {
-    return this.buildResponse(cheerio.load(html));
+   //s console.log(cheerio.load(html));
+    var domTree = cheerio.load(html)
+    return this.buildResponse(domTree, html);
   },
 
-  buildResponse: function (domTree) {
-    return new Response(this.getDuration(domTree), this.getWalkDuration(domTree), this.getConnections(domTree), this.getNbConnections(domTree));
+  buildResponse: function (domTree, html) {
+    console.log(domTree);
+    return new Response(this.getDuration(domTree, html), this.getWalkDuration(domTree), this.getConnections(domTree), this.getNbConnections(domTree));
   },
 
   createTimeObjectFromTimeStr: function (timeStr) {
+    console.log("timeStr = " +timeStr);
     var timeMatches = TIME_REGEX.exec(timeStr.replace(':', '').trim());
     return new Time(timeMatches[2] || 0, timeMatches[3] || 0); 
   },
 
-  getDuration : function (domTree) {
-    var fullWalkDurationStr = domTree('dd.time').find('b').text();
+  getDuration : function (domTree, html) {
+    var fullWalkDurationStr = domTree('dd.walk').find('b').text();
+    //console.log("domTree = " + domTree('dd.walk').find('b'));
+    console.log("fullWalkDurationStr = " + fullWalkDurationStr);
+    console.log(domTree('b, dd.walk').text());
     return this.createTimeObjectFromTimeStr(fullWalkDurationStr);
+    //return html;
   },
 
   getWalkDuration : function(domTree) {
-    var fullWalkDurationStr = domTree('dd.walk').find('b').text();
-    return this.createTimeObjectFromTimeStr(fullWalkDurationStr);
+    var fullWalkDurationStr = domTree('dd.walk');
+    //return this.createTimeObjectFromTimeStr(fullWalkDurationStr);
   },
 
   getConnections : function (domTree) {
