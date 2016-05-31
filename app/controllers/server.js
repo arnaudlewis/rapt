@@ -17,17 +17,14 @@ app.all('/', function(req, res, next) {
  });
 
 app.get('/itinerary', function(req, res, next) {
+
   var requestParams = url.parse(req.url,true).query;
-
   ReverseGeocoder.getAddress(requestParams.geolocation_latitude, requestParams.geolocation_longitude, function(address) {
-
     requestRatp(address, requestParams.arrival, function(html) {
       res.status(200)
       .send(JSON.stringify(Scraper.execute(html)));
     });
-
   });
-
 });
 
 app.get('/stations', function(req, res, next) {
@@ -54,13 +51,9 @@ function requestRatp(address, station, callback) {
     }
   };
   request(options, function (error, response, html) {
-    console.log(options);
     if (!error && response.statusCode == 200) {
       callback(html);
     }
-  }).on('response', function(response) {
-    console.log(response.statusCode) // 200 
-    console.log(response.parseHtml) 
   });
 }
 
