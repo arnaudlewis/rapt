@@ -21,7 +21,7 @@ module.exports = {
   },
 
   wapStation: function (strAccents) {
-    var stationRegex = new RegExp("^(.*)([\\s]\\((RER|METRO)\\)),[\\s].+$");
+    //var stationRegex = new RegExp("^(.*)([\\s]\\((RER|METRO)\\)),[\\s].+$");
 
     var strAccents = strAccents.split('');
     var strAccentsOut = new Array();
@@ -35,7 +35,7 @@ module.exports = {
       strAccentsOut[y] = strAccents[y];
     }
     strAccentsOut = strAccentsOut.join('');
-    return stationRegex.exec(strAccentsOut)[1];
+    return strAccentsOut;
   },
 
   sansAccent: function replaceAccents(str){
