@@ -21,7 +21,6 @@ module.exports = {
 
   createTimeObjectFromTimeStr: function (timeStr) {
     var timeMatches = TIME_REGEX.exec(timeStr.replace(':', '').trim());
-    console.log(timeMatches);
     return new Time(timeMatches[2], timeMatches[3]); 
   },
 
@@ -48,7 +47,6 @@ module.exports = {
 
   getConnections : function (domTree) {
     var connections = [];
-    console.log(domTree('div.bg3'));
     var domSteps = domTree('div.bg3');
 
     var counterStep = 0;
@@ -69,7 +67,6 @@ module.exports = {
         direction = domTree(domSteps[dataStep]).clone().children().remove().end().text();
       }
       else if (dataStep % 4 == 1){
-        console.log(domTree(domSteps[dataStep]).children('img').attr('alt'));
         var line = domTree(domSteps[dataStep]).children('img').attr('alt').replace(/[^\w\s]/gi, '');
 
         departure = domTree(domSteps[dataStep]).clone().children().remove().end().text();

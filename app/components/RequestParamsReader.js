@@ -63,10 +63,10 @@ module.exports = {
               .replace(/[\xF9-\xFC]/g, "u")
               .replace(/[\xFE]/g, "p")
               .replace(/[\xFD\xFF]/g, "y");
-  }
+    }
 
-  return str;
-},
+    return str;
+  },
 
   generateWapParams: function (address, station) {
     var returnParam = {
