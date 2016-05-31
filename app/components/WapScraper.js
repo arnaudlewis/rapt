@@ -69,7 +69,7 @@ module.exports = {
         direction = domTree(domSteps[dataStep]).clone().children().remove().end().text();
       }
       else if (dataStep % 4 == 1){
-        
+        console.log(domTree(domSteps[dataStep]).children('img').attr('alt'));
         var line = domTree(domSteps[dataStep]).children('img').attr('alt').replace(/[^\w\s]/gi, '');
 
         departure = domTree(domSteps[dataStep]).clone().children().remove().end().text();
